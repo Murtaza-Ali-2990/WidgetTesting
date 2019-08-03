@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/name_title"
+        android:padding="20dp"
+        android:textSize="25dp"
+        android:background="#338ff8"
+        android:id="@+id/title_display"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_display"
+        android:layout_marginTop="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:hint="@string/name_data_field"
+        android:padding="5dp"
+        android:id="@+id/name_data"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit_name"
+        android:padding="10dp"
+        android:layout_marginLeft="200dp"
+        android:layout_below="@+id/name_data"
+        android:id="@+id/submit_button" />
+
+</RelativeLayout>

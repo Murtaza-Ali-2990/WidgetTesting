@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Testapp</string>
+    <string name="action_settings">Settings</string>
+    <string name="submit_name">Submit</string>
+    <string name="name_title">Enter Name</string>
+    <string name="name_data_field">Name</string>
+    <string name="appwidget_text">Test Widget</string>
+    <string name="add_widget">Add widget</string>
+</resources>
