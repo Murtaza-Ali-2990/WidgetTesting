@@ -7,57 +7,47 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RemoteViews;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.net.Inet4Address;
 
 /**
  * Implementation of App Widget functionality.
  */
-public class NewAppWidget extends AppWidgetProvider {
+public class AppWidgetMain extends AppWidgetProvider {
 
     public static void sendRefreshBroadcast(Context context) {
         Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.setComponent(new ComponentName(context, NewAppWidget.class));
+        intent.setComponent(new ComponentName(context, AppWidgetMain.class));
         context.sendBroadcast(intent);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        final String action = intent.getAction();
-        if(action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE))  {
-            Log.d("CALL", "onReceive: Notify called");
+        if(intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            ComponentName componentName = new ComponentName(context, NewAppWidget.class);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.list_view_for_widget);
+            ComponentName componentName = new ComponentName(context, AppWidgetMain.class);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.list_view_for_main_widget);
         }
-
         super.onReceive(context, intent);
-        Log.d("CALL", "On receive");
     }
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        //Get views
-        Intent intent = new Intent(context, WidgetService.class);
+        //to get views in intent
+        Intent intent = new Intent(context, AppWidgetMainService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-        views.setRemoteAdapter(appWidgetId, R.id.list_view_for_widget, intent);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget_main);
+        views.setRemoteAdapter(appWidgetId, R.id.list_view_for_main_widget, intent);
 
-        Log.e("MSG", "name");
+        //For widget button
+        Intent buttonIntent = new Intent(context, ActivityToEditWidget.class);
+        PendingIntent buttonPendingIntent = PendingIntent.getActivity(context, 0, buttonIntent, 0);
+        views.setOnClickPendingIntent(R.id.button_for_widget, buttonPendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -66,11 +56,9 @@ public class NewAppWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        Log.d("CALL", "On update called");
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override

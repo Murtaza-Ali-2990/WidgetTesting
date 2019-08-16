@@ -4,6 +4,7 @@
     <string name="submit_name">Submit</string>
     <string name="name_title">Enter Name</string>
     <string name="name_data_field">Name</string>
-    <string name="appwidget_text">Test Widget</string>
+    <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="app_wid_main_text">List Widget</string>
 </resources>

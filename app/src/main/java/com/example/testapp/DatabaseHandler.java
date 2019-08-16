@@ -5,10 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -30,7 +28,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACTS);
-
         onCreate(db);
     }
 
@@ -60,6 +57,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 nameDataList.add(nameData);
             }while (cursor.moveToNext());
         }
+        cursor.close();
+
         return nameDataList;
     }
 
@@ -67,12 +66,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         NameData nameData = new NameData();
 
         String query = "SELECT * FROM " + TABLE_CONTACTS;
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToLast();
-
         nameData.setName(cursor.getString(0));
+
+        cursor.close();
 
         return nameData;
     }

@@ -11,9 +11,9 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHolder> {
 
-    List<NameData> nameDataList;
+    private List<NameData> nameDataList;
 
-    public RecyclerAdapter(List<NameData> nameDataList) {
+    RecyclerAdapter(List<NameData> nameDataList) {
         this.nameDataList = nameDataList;
     }
 
@@ -21,9 +21,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyHold
 
         TextView name;
 
-        public MyHolder(View view) {
+        private MyHolder(View view) {
             super(view);
-
             name = view.findViewById(R.id.show_name);
         }
 

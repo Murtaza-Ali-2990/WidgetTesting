@@ -3,25 +3,23 @@ package com.example.testapp;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory {
+public class AppWidgetMainFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private List<NameData> nameDataList = new ArrayList<>();
     private Context context;
-    private DatabaseHandler databaseHandler;
     private int appWidgetID;
+    private List<NameData> nameDataList = new ArrayList<>();
+    private DatabaseHandler databaseHandler;
 
-    public WidgetDataProvider(Context context, Intent intent) {
+    public AppWidgetMainFactory(Context context, Intent intent) {
         this.context = context;
         appWidgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
     }
-
     @Override
     public void onCreate() {
         databaseHandler = new DatabaseHandler(context);
@@ -30,10 +28,6 @@ public class WidgetDataProvider implements RemoteViewsService.RemoteViewsFactory
     @Override
     public void onDataSetChanged() {
         nameDataList = databaseHandler.allNameData();
-        for(NameData name : nameDataList) {
-            Log.d("DATA", "onDataSetChanged: " + name.getName());
-        }
-        Log.d("CALL", "onDataSetChanged: Called");
     }
 
     @Override

@@ -9,10 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -20,11 +20,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DataPass{
 
-    private DatabaseHandler databaseHandler;
-    private NameData nameData;
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
-    private List<NameData> nameDataList;
+    private List<NameData> nameDataList = new ArrayList<>();
     private Input_Dialog input_dialog;
 
 
@@ -35,18 +33,14 @@ public class MainActivity extends AppCompatActivity implements DataPass{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        databaseHandler = new DatabaseHandler(this);
-        nameData = new NameData();
-
-        nameDataList = new ArrayList<>();
-
+        DatabaseHandler databaseHandler = new DatabaseHandler(this);
         nameDataList = databaseHandler.allNameData();
+
         adapter = new RecyclerAdapter(nameDataList);
 
         recyclerView = findViewById(R.id.recycler_view_for_name);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -67,24 +61,24 @@ public class MainActivity extends AppCompatActivity implements DataPass{
         nameDataList.add(nameData);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-        NewAppWidget newAppWidget = new NewAppWidget();
-        Context context = getApplicationContext();
-        ComponentName name = new ComponentName(context, NewAppWidget.class);
-        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
-        for(int i = 0; i < ids.length; i++)
-            Log.e("VAR", "ID " + ids[i]);
-        for (int appWID : ids) {
-            Log.e("MSG"," " + appWID);
-            NewAppWidget.updateAppWidget(this, newAppWidget.appWidgetManager, appWID);
 
-        }
+        final MainActivity mainActivity = this;
+        mainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this, "New Data added", Toast.LENGTH_LONG).show();
+                NewAppWidget.sendRefreshBroadcast(MainActivity.this);
+                AppWidgetMain.sendRefreshBroadcast(MainActivity.this);
+            }
+        });
     }
+
+    @Override
+    public void onDestroyCalled() {}
 
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
     @Override

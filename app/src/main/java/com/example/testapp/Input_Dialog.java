@@ -13,19 +13,18 @@ import android.widget.EditText;
 interface DataPass {
 
     void updateAdapter(NameData nameData);
+    void onDestroyCalled();
 }
 
 public class Input_Dialog extends DialogFragment {
 
     private EditText nameText;
-    private Button submitButton;
     private NameData nameData;
     private DatabaseHandler databaseHandler;
     private DataPass context;
 
 
-    public Input_Dialog() {
-    }
+    public Input_Dialog() {}
 
     public void setListener(DataPass context) {
         this.context = context;
@@ -34,8 +33,7 @@ public class Input_Dialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.get_name_text, container);
-        return view;
+        return inflater.inflate(R.layout.get_name_text, container);
     }
 
     @Override
@@ -43,9 +41,11 @@ public class Input_Dialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         nameText = view.findViewById(R.id.name_data);
-        submitButton = view.findViewById(R.id.submit_button);
+        Button submitButton = view.findViewById(R.id.submit_button);
         nameData = new NameData();
         databaseHandler = new DatabaseHandler(getActivity());
+
+
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +59,13 @@ public class Input_Dialog extends DialogFragment {
                 getDialog().dismiss();
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        databaseHandler.close();
+        context.onDestroyCalled();
     }
 
     public void setDataListener(DataPass context) {
