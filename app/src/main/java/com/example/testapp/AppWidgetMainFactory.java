@@ -3,6 +3,7 @@ package com.example.testapp;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -28,6 +29,7 @@ public class AppWidgetMainFactory implements RemoteViewsService.RemoteViewsFacto
     @Override
     public void onDataSetChanged() {
         nameDataList = databaseHandler.allNameData();
+        Log.d("COUNT", "onDataSetChanged: called");
     }
 
     @Override
@@ -42,6 +44,7 @@ public class AppWidgetMainFactory implements RemoteViewsService.RemoteViewsFacto
 
     @Override
     public RemoteViews getViewAt(int position) {
+        Log.d("COUNT", "getViewAt: position" + position);
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.show_data_layout);
         remoteViews.setTextViewText(R.id.show_name, nameDataList.get(position).getName());
 
